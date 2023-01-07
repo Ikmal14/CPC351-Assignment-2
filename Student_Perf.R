@@ -5,6 +5,7 @@ library(dplyr)
 library(tidyverse)
 library(forcats)
 
+# Q1 by everyone
 # Insert Data
 students_performance  <- read.csv("StudentsPerformance.csv")
 
@@ -30,6 +31,9 @@ students_performance$lunch <- NULL
 
 # To rename the columns
 colnames(students_performance) <- c("STU_Gender", "STU_Ethnic", "PAR_Education", "PREP_CourseStatus", "Maths", "Reading", "Writing")
+
+# Show summary
+summary(students_performance)
 
 # QUESTION 2 by Amir Azizi
 # Create a pie chart
@@ -108,20 +112,25 @@ education_order <- c("high school", "some high school", "some college", "associa
 # convert the PAR_Education variable to a factor with the levels in the desired order
 students_performance$PAR_Education <- factor(students_performance$PAR_Education, levels = education_order)
 
+# create a new data frame with a random sample of 59 data points for each parental education level
+sampled_data <- students_performance %>%
+  group_by(PAR_Education) %>%
+  sample_n(59)
+
 # create a bar chart showing the mean Maths scores by parental education level
-ggplot(data = students_performance, aes(x = PAR_Education, y = Maths)) +
-  geom_col() +
-  labs(title = "Mean Math Scores by Parental Education Level", x = "Parental Education Level", y = "Mean Math Score")
+ggplot(data = sampled_data, aes(x = PAR_Education, y = Maths)) +
+  stat_summary(fun.y = mean, geom = "col") +
+  labs(title = "Mean Math Scores by Parental Education Level (n = 59)", x = "Parental Education Level", y = "Mean Math Score")
 
 # create a bar chart showing the mean Reading scores by parental education level
-ggplot(data = students_performance, aes(x = PAR_Education, y = Reading)) +
-  geom_col() +
-  labs(title = "Mean Writing Scores by Parental Education Level", x = "Parental Education Level", y = "Mean Writing Score")
+ggplot(data = sampled_data, aes(x = PAR_Education, y = Reading)) +
+  stat_summary(fun.y = mean, geom = "col") +
+  labs(title = "Mean Reading Scores by Parental Education Level (n = 59)", x = "Parental Education Level", y = "Mean Reading Score")
 
 # create a bar chart showing the mean Writing scores by parental education level
-ggplot(data = students_performance, aes(x = PAR_Education, y = Writing)) +
-  geom_col() +
-  labs(title = "Mean Writing Scores by Parental Education Level", x = "Parental Education Level", y = "Mean Writing Score")
+ggplot(data = sampled_data, aes(x = PAR_Education, y = Writing)) +
+  stat_summary(fun.y = mean, geom = "col") +
+  labs(title = "Mean Writing Scores by Parental Education Level (n = 59)", x = "Parental Education Level", y = "Mean Writing Score")
 
 
 
@@ -133,10 +142,23 @@ ggplot(data = students_performance, aes(x = PAR_Education, y = Writing)) +
 colors <- c("red", "blue", "green", "orange", "purple")
 
 # create a barplot of the math scores by ethnicity and parental education level
-barplot(tapply(students_performance$Maths, list(students_performance$STU_Ethnic, 
-                                                students_performance$PAR_Education), mean),
+barplot(tapply(sampled_data$Maths, list(sampled_data$STU_Ethnic, sampled_data$PAR_Education), mean),
         xlab = "Ethnicity", ylab = "Math Score",
-        main = "Bar Chart of Math Score by Parental Level of Education and Ethnicity", 
+        main = "Bar Chart of Math Score by Parental Level of Education and Ethnicity (n = 59)", 
+        beside = TRUE,
+        col = colors)
+
+# create a barplot of the Reading scores by ethnicity and parental education level
+barplot(tapply(sampled_data$Reading, list(sampled_data$STU_Ethnic, sampled_data$PAR_Education), mean),
+        xlab = "Ethnicity", ylab = "Reading Score",
+        main = "Bar Chart of Reading Score by Parental Level of Education and Ethnicity (n = 59)", 
+        beside = TRUE,
+        col = colors)
+
+# create a barplot of the math scores by ethnicity and parental education level
+barplot(tapply(sampled_data$Writing, list(sampled_data$STU_Ethnic, sampled_data$PAR_Education), mean),
+        xlab = "Ethnicity", ylab = "Writing Score",
+        main = "Bar Chart of Writing Score by Parental Level of Education and Ethnicity (n = 59)", 
         beside = TRUE,
         col = colors)
 
