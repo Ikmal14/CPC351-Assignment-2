@@ -39,10 +39,14 @@ superStore$market <- as.factor(superStore$market)
 superStore$segment <- as.factor(superStore$segment)
 superStore$order_id <- as.factor(superStore$order_id)
 
+<<<<<<< HEAD
 # Slice the data into 1000 values only
 superStore <- slice(superStore, 1:1000)
 
 # Show summary
+=======
+
+>>>>>>> 08dbb4783aed01286423373d2ae943cd0c7402bc
 summary(superStore)
 
 
