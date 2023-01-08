@@ -122,6 +122,12 @@ ggplot(data = sampled_data, aes(x = PAR_Education, y = Maths)) +
   stat_summary(fun.y = mean, geom = "col") +
   labs(title = "Mean Math Scores by Parental Education Level (n = 59)", x = "Parental Education Level", y = "Mean Math Score")
 
+# calculate the mean math scores for each parental education level
+means <- tapply(sampled_data$Writing, sampled_data$PAR_Education, mean)
+
+# print the means to the console
+print(means)
+
 # create a bar chart showing the mean Reading scores by parental education level
 ggplot(data = sampled_data, aes(x = PAR_Education, y = Reading)) +
   stat_summary(fun.y = mean, geom = "col") +
